@@ -22,7 +22,7 @@ PacketDecoder::PacketDecoder()
 
 PacketDecoder::~PacketDecoder()
 {
-
+  delete _frame;
 }
 
 void PacketDecoder::SetMaxNumberOfFrames(unsigned int max_num_of_frames)

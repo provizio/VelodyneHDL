@@ -22,7 +22,7 @@ PacketBundleDecoder::PacketBundleDecoder()
 
 PacketBundleDecoder::~PacketBundleDecoder()
 {
-
+  delete _frame;
 }
 
 void PacketBundleDecoder::SetMaxNumberOfFrames(unsigned int max_num_of_frames)
