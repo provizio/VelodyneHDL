@@ -67,9 +67,6 @@ struct HDLRGB
   uint8_t b;
 };
 
-double *cos_lookup_table_;
-double *sin_lookup_table_;
-HDLLaserCorrection laser_corrections_[HDL_MAX_NUM_LASERS];
 }
 
 class PacketDecoder

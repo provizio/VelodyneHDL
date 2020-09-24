@@ -10,6 +10,7 @@
 #include <boost/foreach.hpp>
 
 #include "PacketDecoder.h"
+#include "PacketDecoderGlobalVars.h"
 
 PacketDecoder::PacketDecoder()
 {
