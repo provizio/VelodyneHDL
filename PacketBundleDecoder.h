@@ -31,7 +31,8 @@ public:
   void SetMaxNumberOfFrames(unsigned int max_num_of_frames);
   void DecodeBundle(std::string* bundle, unsigned int* bundle_length);
   void SetCorrectionsFile(const std::string& corrections_file);
-  std::deque<HDLFrame> GetFrames();
+  std::deque<HDLFrame>& GetFrames();
+  const std::deque<HDLFrame>& GetFrames() const;
   void ClearFrames();
   bool GetLatestFrame(HDLFrame* frame);
 
@@ -41,8 +42,8 @@ protected:
   void LoadCorrectionsFile(const std::string& correctionsFile);
   void LoadHDL32Corrections();
   void SetCorrectionsCommon();
-  void ProcessHDLPacket(unsigned char *data, unsigned int data_length);
-  void PushFiringData(unsigned char laserId, unsigned short azimuth, unsigned int timestamp, HDLLaserReturn laserReturn, HDLLaserCorrection correction);
+  void ProcessHDLPacket(const unsigned char *data, unsigned int data_length);
+  void PushFiringData(unsigned char laserId, unsigned short azimuth, unsigned int timestamp, HDLLaserReturn laserReturn, const HDLLaserCorrection& correction);
 
 private:
   std::string _corrections_file;

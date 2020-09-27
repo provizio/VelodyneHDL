@@ -44,17 +44,17 @@ void PacketDecoder::DecodePacket(std::string* data, unsigned int* data_length)
   ProcessHDLPacket(const_cast<unsigned char*>(data_char), *data_length);
 }
 
-void PacketDecoder::ProcessHDLPacket(unsigned char *data, unsigned int data_length)
+void PacketDecoder::ProcessHDLPacket(const unsigned char *data, unsigned int data_length)
 {
   if (data_length != 1206) {
     std::cout << "PacketDecoder: Warning, data packet is not 1206 bytes" << std::endl;
     return;
   }
 
-  HDLDataPacket* dataPacket = reinterpret_cast<HDLDataPacket *>(data);
+  const HDLDataPacket *dataPacket = reinterpret_cast<const HDLDataPacket *>(data);
 
   for (int i = 0; i < HDL_FIRING_PER_PKT; ++i) {
-    HDLFiringData firingData = dataPacket->firingData[i];
+    const HDLFiringData& firingData = dataPacket->firingData[i];
     int offset = (firingData.blockIdentifier == BLOCK_0_TO_31) ? 0 : 32;
 
     if (firingData.rotationalPosition < _last_azimuth) {
@@ -82,7 +82,7 @@ void PacketDecoder::SplitFrame()
   _frame = new HDLFrame();
 }
 
-void PacketDecoder::PushFiringData(unsigned char laserId, unsigned short azimuth, unsigned int timestamp, HDLLaserReturn laserReturn, HDLLaserCorrection correction)
+void PacketDecoder::PushFiringData(unsigned char laserId, unsigned short azimuth, unsigned int timestamp, HDLLaserReturn laserReturn, const HDLLaserCorrection& correction)
 {
   double cosAzimuth, sinAzimuth;
   if (correction.azimuthCorrection == 0) {
@@ -246,7 +246,12 @@ void PacketDecoder::SetCorrectionsCommon()
   }
 }
 
-std::deque<PacketDecoder::HDLFrame> PacketDecoder::GetFrames()
+std::deque<PacketDecoder::HDLFrame>& PacketDecoder::GetFrames()
+{
+  return _frames;
+}
+
+const std::deque<PacketDecoder::HDLFrame>& PacketDecoder::GetFrames() const
 {
   return _frames;
 }
