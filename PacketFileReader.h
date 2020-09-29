@@ -69,14 +69,19 @@ public:
     if (pcap_compile(pcapFile, &filter, "udp", 0, PCAP_NETMASK_UNKNOWN) == -1)
       {
       this->LastError = pcap_geterr(pcapFile);
+      pcap_close(pcapFile);
       return false;
       }
 
     if (pcap_setfilter(pcapFile, &filter) == -1)
       {
       this->LastError = pcap_geterr(pcapFile);
+      pcap_freecode(&filter);
+      pcap_close(pcapFile);
       return false;
       }
+
+    pcap_freecode(&filter);
 
     this->FileName = filename;
     this->PCAPFile = pcapFile;

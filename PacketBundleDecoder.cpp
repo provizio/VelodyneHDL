@@ -14,6 +14,7 @@
 
 PacketBundleDecoder::PacketBundleDecoder()
 {
+  _frame = 0;
   _max_num_of_frames = 10;
   UnloadData();
   InitTables();
@@ -126,6 +127,7 @@ void PacketBundleDecoder::SetCorrectionsFile(const std::string& corrections_file
 
 void PacketBundleDecoder::UnloadData()
 {
+  delete _frame;
   _frame = new HDLFrame();
   _frames.clear();
 }
