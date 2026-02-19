@@ -24,7 +24,7 @@ protected:
 private:
   unsigned int _port;
   char _rx_buffer[1500];
-  boost::asio::io_service _io_service;
+  boost::asio::io_context _io_service;
   boost::shared_ptr<boost::asio::ip::udp::socket> _socket;
 };
 

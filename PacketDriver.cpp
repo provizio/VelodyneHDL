@@ -5,9 +5,10 @@
 #include <iostream>
 
 #include "PacketDriver.h"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 using boost::asio::ip::udp;
+using namespace boost::placeholders;
 
 PacketDriver::PacketDriver()
 {
@@ -77,7 +78,7 @@ bool PacketDriver::GetPacket(std::string* data, unsigned int* data_length)
   try {
     _socket->async_receive(boost::asio::buffer(_rx_buffer, 1500),
     boost::bind(&PacketDriver::GetPacketCallback, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred, data, data_length));
-    _io_service.reset();
+    _io_service.restart();
     _io_service.run();
     return (true);
   } catch(std::exception & e) {

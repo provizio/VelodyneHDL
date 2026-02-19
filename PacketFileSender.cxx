@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     std::string destinationIp = "127.0.0.1";
     int dataPort = 2368;
 
-    boost::asio::io_service ioService;
+    boost::asio::io_context ioService;
     boost::asio::ip::udp::endpoint destinationEndpoint(boost::asio::ip::address_v4::from_string(destinationIp), dataPort);
     boost::asio::ip::udp::socket socket(ioService);
     socket.open(destinationEndpoint.protocol());

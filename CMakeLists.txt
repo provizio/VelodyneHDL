@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 # VelodyneHDL Driver
 project(VelodyneHDL)
 
+add_definitions(-D_USE_MATH_DEFINES)
+if(WIN32)
+  add_definitions(-D_WIN32_WINNT=0x0601)
+endif()
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(Threads)
