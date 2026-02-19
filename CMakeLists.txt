@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.5)
 
 # VelodyneHDL Driver
 project(VelodyneHDL)
@@ -6,28 +6,32 @@ project(VelodyneHDL)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(Threads)
+find_package(Boost REQUIRED COMPONENTS system thread)
+find_package(libpcap REQUIRED)
 
-add_library(PacketDriver SHARED PacketDriver.cpp)
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+
+add_library(PacketDriver STATIC PacketDriver.cpp)
 target_link_libraries(PacketDriver
-  boost_system
+  Boost::system
 )
 
-add_library(PacketDecoder SHARED PacketDecoder.cpp)
+add_library(PacketDecoder STATIC PacketDecoder.cpp)
 target_link_libraries(PacketDecoder
 )
 
-add_library(PacketBundler SHARED PacketBundler.cpp)
+add_library(PacketBundler STATIC PacketBundler.cpp)
 target_link_libraries(PacketBundler
 )
 
-add_library(PacketBundleDecoder SHARED PacketBundleDecoder.cpp)
+add_library(PacketBundleDecoder STATIC PacketBundleDecoder.cpp)
 target_link_libraries(PacketBundleDecoder
 )
 
 add_executable(test_PacketDriver tests/test_PacketDriver.cpp)
 target_link_libraries(test_PacketDriver
   PacketDriver
-  pcap
+  libpcap::libpcap
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
@@ -35,14 +39,14 @@ add_executable(test_PacketDecoder tests/test_PacketDecoder.cpp)
 target_link_libraries(test_PacketDecoder
   PacketDriver
   PacketDecoder
-  pcap
+  libpcap::libpcap
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
 add_executable(test_PacketWriter tests/test_PacketWriter.cpp)
 target_link_libraries(test_PacketWriter
   PacketDriver
-  pcap
+  libpcap::libpcap
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
@@ -63,8 +67,8 @@ target_link_libraries(test_PacketBundleDecoder
 
 add_executable(PacketFileSender PacketFileSender.cxx)
 target_link_libraries(PacketFileSender
-  boost_system
-  boost_thread
-  pcap
+  Boost::system
+  Boost::thread
+  libpcap::libpcap
   ${CMAKE_THREAD_LIBS_INIT}
 )
