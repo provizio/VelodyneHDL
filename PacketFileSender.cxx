@@ -36,6 +36,7 @@
 #include <string>
 #include <cstdlib>
 #include <iostream>
+#include <chrono>
 
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp>
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
     int dataPort = 2368;
 
     boost::asio::io_context ioService;
-    boost::asio::ip::udp::endpoint destinationEndpoint(boost::asio::ip::address_v4::from_string(destinationIp), dataPort);
+    boost::asio::ip::udp::endpoint destinationEndpoint(boost::asio::ip::make_address_v4(destinationIp), dataPort);
     boost::asio::ip::udp::socket socket(ioService);
     socket.open(destinationEndpoint.protocol());
     //socket.connect(destinationEndpoint);
@@ -107,11 +108,8 @@ int main(int argc, char* argv[])
         HDLDataPacket* dataPacket = reinterpret_cast<HDLDataPacket *>(data2);
         packetTime = (dataPacket->gpsTimestamp*1e-6);
 
-        timespec tp;
-        clock_gettime(CLOCK_REALTIME,&tp);
-        long long timestamp_s = (tp).tv_sec*1e9;
-        long long timestamp = (tp).tv_nsec + timestamp_s;
-        systemTime = ((double)timestamp)*1e-9;
+        auto now = std::chrono::high_resolution_clock::now();
+        systemTime = std::chrono::duration<double>(now.time_since_epoch()).count();
 
         if (prevPacketTime != 0 && prevSystemTime != 0) {
           double packetDiff = packetTime-prevPacketTime;

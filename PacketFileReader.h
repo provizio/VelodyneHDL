@@ -116,22 +116,20 @@ public:
 
   void GetFilePosition(fpos_t* position)
   {
-#ifdef _MSC_VER
-    pcap_fgetpos(this->PCAPFile, position);
-#else
     FILE* f = pcap_file(this->PCAPFile);
-    fgetpos(f, position);
-#endif
+    if (f)
+      {
+      fgetpos(f, position);
+      }
   }
 
   void SetFilePosition(fpos_t* position)
   {
-#ifdef _MSC_VER
-    pcap_fsetpos(this->PCAPFile, position);
-#else
     FILE* f = pcap_file(this->PCAPFile);
-    fsetpos(f, position);
-#endif
+    if (f)
+      {
+      fsetpos(f, position);
+      }
   }
 
   bool NextPacket(const unsigned char*& data, unsigned int& dataLength, double& timeSinceStart, pcap_pkthdr** headerReference=NULL)
